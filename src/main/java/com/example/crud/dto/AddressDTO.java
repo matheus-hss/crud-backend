@@ -13,7 +13,7 @@ public class AddressDTO {
     @NotNull
     @Min(value = 1)
     @Max(value = 99999)
-    private BigInteger num;
+    private BigInteger number;
     @NotBlank
     @Size(max = 50)
     private String neighborhood;
@@ -40,12 +40,12 @@ public class AddressDTO {
         this.street = street;
     }
 
-    public BigInteger getNum() {
-        return num;
+    public BigInteger getNumber() {
+        return number;
     }
 
-    public void setNum(BigInteger num) {
-        this.num = num;
+    public void setNumber(BigInteger number) {
+        this.number = number;
     }
 
     public String getNeighborhood() {
