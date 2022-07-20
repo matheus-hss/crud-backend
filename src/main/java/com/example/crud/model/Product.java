@@ -7,7 +7,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name="tb_product")
-public class ProductModel implements Serializable {
+public class Product implements Serializable {
     private static final long serialVersionUID = -7430992601373677788L;
 
     @Id
@@ -15,14 +15,11 @@ public class ProductModel implements Serializable {
     @Column(nullable = false, length = 16)
     private UUID id;
     @Column(nullable = false, length = 30)
-    private String productName;
+    private String name;
     @Column(nullable = false, precision = 7, scale = 2)
-    private BigDecimal productValue;
+    private BigDecimal value;
     @Column(nullable = false, length = 100)
     private String description;
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(name = "lab_id", nullable = false, foreignKey = @ForeignKey(name = "fkproduct_lab"))
-    private LabModel lab;
 
     public UUID getId() {
         return id;
@@ -32,20 +29,20 @@ public class ProductModel implements Serializable {
         this.id = id;
     }
 
-    public String getProductName() {
-        return productName;
+    public String getName() {
+        return name;
     }
 
-    public void setProductName(String productName) {
-        this.productName = productName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public BigDecimal getProductValue() {
-        return productValue;
+    public BigDecimal getValue() {
+        return value;
     }
 
-    public void setProductValue(BigDecimal productValue) {
-        this.productValue = productValue;
+    public void setValue(BigDecimal value) {
+        this.value = value;
     }
 
     public String getDescription() {
@@ -54,13 +51,5 @@ public class ProductModel implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public LabModel getLab() {
-        return lab;
-    }
-
-    public void setLab(LabModel lab) {
-        this.lab = lab;
     }
 }

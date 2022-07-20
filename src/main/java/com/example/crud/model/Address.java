@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.math.BigInteger;
 
 @Embeddable
-public class AddressModel implements Serializable {
+public class Address implements Serializable {
     private static final long serialVersionUID = 4382639141950226761L;
 
     @Column(nullable = false, length = 8)
@@ -14,7 +14,7 @@ public class AddressModel implements Serializable {
     @Column(nullable = false, length = 50)
     private String street;
     @Column(nullable = false, precision = 5)
-    private BigInteger num;
+    private BigInteger number;
     @Column(nullable = false, length = 50)
     private String neighborhood;
     @Column(nullable = false, length = 50)
@@ -38,12 +38,12 @@ public class AddressModel implements Serializable {
         this.street = street;
     }
 
-    public BigInteger getNum() {
-        return num;
+    public BigInteger getNumber() {
+        return number;
     }
 
-    public void setNum(BigInteger num) {
-        this.num = num;
+    public void setNumber(BigInteger number) {
+        this.number = number;
     }
 
     public String getNeighborhood() {

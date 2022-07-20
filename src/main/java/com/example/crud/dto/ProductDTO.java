@@ -6,29 +6,29 @@ import java.math.BigDecimal;
 public class ProductDTO {
     @NotBlank
     @Size(max = 30)
-    private String productName;
+    private String name;
     @NotNull
     @DecimalMin(value = "0.1")
     @DecimalMax(value = "99999.99")
-    private BigDecimal productValue;
+    private BigDecimal value;
     @NotBlank
     @Size(max = 100)
     private String description;
 
-    public String getProductName() {
-        return productName;
+    public String getName() {
+        return name;
     }
 
-    public void setProductName(String productName) {
-        this.productName = productName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public BigDecimal getProductValue() {
-        return productValue;
+    public BigDecimal getValue() {
+        return value;
     }
 
-    public void setProductValue(BigDecimal productValue) {
-        this.productValue = productValue;
+    public void setValue(BigDecimal value) {
+        this.value = value;
     }
 
     public String getDescription() {

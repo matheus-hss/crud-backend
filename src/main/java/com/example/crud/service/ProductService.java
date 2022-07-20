@@ -1,6 +1,6 @@
 package com.example.crud.service;
 
-import com.example.crud.model.ProductModel;
+import com.example.crud.model.Product;
 import com.example.crud.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,20 +17,20 @@ public class ProductService {
     private ProductRepository productRepository;
 
     @Transactional
-    public ProductModel save(ProductModel productModel){
-        return productRepository.save(productModel);
+    public Product save(Product product){
+        return this.productRepository.save(product);
     }
 
     @Transactional
-    public void delete(ProductModel productModel){
-        productRepository.delete(productModel);
+    public void delete(Product product){
+        this.productRepository.delete(product);
     }
 
-    public Page<ProductModel> findAll(Pageable pageable){
-        return productRepository.findAll(pageable);
+    public Page<Product> findAll(Pageable pageable){
+        return this.productRepository.findAll(pageable);
     }
 
-    public Optional<ProductModel> findById(UUID id){
-        return productRepository.findById(id);
+    public Optional<Product> findById(UUID id){
+        return this.productRepository.findById(id);
     }
 }

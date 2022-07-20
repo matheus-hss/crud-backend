@@ -1,0 +1,11 @@
+#MSSQL
+spring:
+  datasource:
+    url: jdbc:sqlserver://localhost;databaseName=crud;encrypt=true;trustServerCertificate=true
+    username: sa
+    password: 123456
+    driverClassName: com.microsoft.sqlserver.jdbc.SQLServerDriver
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
