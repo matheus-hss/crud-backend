@@ -1,12 +1,12 @@
 package com.example.crud.dto;
 
+import com.example.crud.model.City;
+
+import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.math.BigInteger;
 
 public class AddressDTO {
-    @NotBlank
-    @Size(max = 8)
-    private String zipCode;
     @NotBlank
     @Size(max = 50)
     private String street;
@@ -17,20 +17,9 @@ public class AddressDTO {
     @NotBlank
     @Size(max = 50)
     private String neighborhood;
-    @NotBlank
-    @Size(max = 50)
-    private String city;
-    @NotBlank
-    @Size(max = 2)
-    private String state;
-
-    public String getZipCode() {
-        return zipCode;
-    }
-
-    public void setZipCode(String zipCode) {
-        this.zipCode = zipCode;
-    }
+    @NotNull
+    @Valid
+    private CityDTO city;
 
     public String getStreet() {
         return street;
@@ -56,19 +45,11 @@ public class AddressDTO {
         this.neighborhood = neighborhood;
     }
 
-    public String getCity() {
+    public CityDTO getCity() {
         return city;
     }
 
-    public void setCity(String city) {
+    public void setCity(CityDTO city) {
         this.city = city;
-    }
-
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
     }
 }

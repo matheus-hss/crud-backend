@@ -1,7 +1,6 @@
 package com.example.crud.model;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigInteger;
 
@@ -9,26 +8,15 @@ import java.math.BigInteger;
 public class Address implements Serializable {
     private static final long serialVersionUID = 4382639141950226761L;
 
-    @Column(nullable = false, length = 8)
-    private String zipCode;
     @Column(nullable = false, length = 50)
     private String street;
     @Column(nullable = false, precision = 5)
     private BigInteger number;
     @Column(nullable = false, length = 50)
     private String neighborhood;
-    @Column(nullable = false, length = 50)
-    private String city;
-    @Column(nullable = false, length = 2)
-    private String state;
-
-    public String getZipCode() {
-        return zipCode;
-    }
-
-    public void setZipCode(String zipCode) {
-        this.zipCode = zipCode;
-    }
+    @OneToOne
+    @JoinColumn(name = "city_id", foreignKey = @ForeignKey(name = "fkuser_city"))
+    private City city;
 
     public String getStreet() {
         return street;
@@ -54,19 +42,11 @@ public class Address implements Serializable {
         this.neighborhood = neighborhood;
     }
 
-    public String getCity() {
+    public City getCity() {
         return city;
     }
 
-    public void setCity(String city) {
+    public void setCity(City city) {
         this.city = city;
-    }
-
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
     }
 }

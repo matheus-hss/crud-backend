@@ -12,6 +12,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -20,10 +21,9 @@ import javax.validation.Valid;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/user/")
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class UserController {
     @Autowired
@@ -36,7 +36,7 @@ public class UserController {
             @ApiResponse(code = 200, message = "User exists"),
             @ApiResponse(code = 404, message = "User not exists")
     })
-    @GetMapping("/login")
+    @GetMapping("login")
     public ResponseEntity<?> login(Principal principal){
         if(principal == null) return ResponseEntity.badRequest().build();
 
@@ -46,23 +46,23 @@ public class UserController {
     @ApiOperation(value = "Add a new user")
     @ApiResponses({
             @ApiResponse(code = 200, message = "Create a new user and add a(or more) role(s) through parameter"),
-            @ApiResponse(code = 404, message = "Email or cpf already registered")
+            @ApiResponse(code = 409, message = "Email or cpf already registered")
     })
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity<?> save(@RequestBody @Valid UserDTO userDTO,
-                                     @RequestParam(name = "role", defaultValue = "user") List<String> roles){
-        Optional<User> optionalEmail = this.userService.findByEmail(userDTO.getEmail());
-        Optional<User> optionalCpf = this.userService.findByCpf(userDTO.getCpf());
+                                     @RequestParam(name = "role", defaultValue = "user") List<String> params){
+        var optionalEmail = this.userService.findByEmail(userDTO.getEmail());
+        var optionalCpf = this.userService.findByCpf(userDTO.getCpf());
 
-        if(optionalEmail.isPresent()) return ResponseEntity.badRequest().body("Email already registered");
+        if(optionalEmail.isPresent()) return ResponseEntity.status(HttpStatus.CONFLICT).body("Email already registered");
 
-        if(optionalCpf.isPresent()) return ResponseEntity.badRequest().body("Cpf already registered");
+        if(optionalCpf.isPresent()) return ResponseEntity.status(HttpStatus.CONFLICT).body("Cpf already registered");
 
         var user = new User();
-        var listRole = new ArrayList();
+        var listRole = new ArrayList<Role>();
 
         for(Role role : roleService.findAll()){
-            for(String roleParam : roles){
+            for(String roleParam : params){
                 if(role.getName().equalsIgnoreCase("role_".concat(roleParam))){
                     listRole.add(role);
                 }
@@ -73,20 +73,21 @@ public class UserController {
 
         user.setRoles(listRole);
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
+        this.userService.save(user);
 
-        return ResponseEntity.ok(this.userService.save(user));
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @ApiOperation(value = "Return a list of users")
     @ApiResponses({
             @ApiResponse(code = 200, message = "List found"),
-            @ApiResponse(code = 404, message = "No one content found")
+            @ApiResponse(code = 404, message = "List not found")
     })
-    @GetMapping("/")
-    public ResponseEntity<Page<User>> findAll(Pageable pageable){
-        Page<User> listUser = this.userService.findAll(pageable);
+    @GetMapping
+    public ResponseEntity<List<User>> findAll(){
+        var listUser = this.userService.findAll();
 
-        if(listUser.isEmpty()) return ResponseEntity.noContent().build();
+        if(listUser.isEmpty()) return ResponseEntity.notFound().build();
 
         return ResponseEntity.ok(listUser);
     }

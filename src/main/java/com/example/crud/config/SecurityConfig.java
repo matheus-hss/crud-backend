@@ -26,8 +26,14 @@ public class SecurityConfig {
         return http.csrf().disable()
                 .userDetailsService(this.userService)
                 .authorizeHttpRequests(authorization -> {
-                    authorization.antMatchers("/user/**").permitAll()
-                            .antMatchers("/product/**").hasRole("ADMIN")
+                    authorization
+                            .antMatchers(HttpMethod.POST, "/product/**").hasRole("ADMIN")
+                            .antMatchers(HttpMethod.PUT, "/product/**").hasRole("ADMIN")
+                            .antMatchers(HttpMethod.DELETE, "/product/**").hasRole("ADMIN")
+                            .antMatchers(HttpMethod.GET, "/product/**").permitAll()
+                            .antMatchers("/user/**").permitAll()
+                            .antMatchers("/state/**").permitAll()
+                            .antMatchers("/city/**").permitAll()
                             .anyRequest().authenticated();
                 })
                 .httpBasic().and().logout(logout -> {

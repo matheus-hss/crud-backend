@@ -44,7 +44,7 @@ public class UserService implements UserDetailsService {
         return this.userRepository.findByCpf(cpf);
     }
 
-    public Page<User> findAll(Pageable pageable) {
-        return this.userRepository.findAll(pageable);
+    public List<User> findAll() {
+        return this.userRepository.findAll();
     }
 }

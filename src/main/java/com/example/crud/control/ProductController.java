@@ -20,7 +20,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/product")
+@RequestMapping("/product/")
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class ProductController {
     @Autowired
@@ -28,9 +28,9 @@ public class ProductController {
 
     @ApiOperation(value = "Add a new product")
     @ApiResponses({
-            @ApiResponse(code = 201, message = "Create a new product")
+            @ApiResponse(code = 201, message = "Product created")
     })
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity<Product> save(@RequestBody @Valid ProductDTO productDTO){
         var product = new Product();
 
@@ -41,28 +41,28 @@ public class ProductController {
 
     @ApiOperation(value = "Delete a product")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "Product deleted"),
+            @ApiResponse(code = 204, message = "Product deleted"),
             @ApiResponse(code = 404, message = "Product not found")
     })
-    @DeleteMapping("/{id}")
+    @DeleteMapping("{id}")
     public ResponseEntity<Product> delete(@PathVariable UUID id){
-        Optional<Product> optionalId = this.productService.findById(id);
+        var optionalId = this.productService.findById(id);
 
         if(optionalId.isEmpty()) return ResponseEntity.notFound().build();
 
         this.productService.delete(optionalId.get());
 
-        return ResponseEntity.ok(optionalId.get());
+        return ResponseEntity.noContent().build();
     }
 
     @ApiOperation(value = "Update a product")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "Product updated"),
+            @ApiResponse(code = 204, message = "Product updated"),
             @ApiResponse(code = 404, message = "Product not found")
     })
-    @PutMapping("/{id}")
+    @PutMapping("{id}")
     public ResponseEntity<?> update(@PathVariable UUID id, @RequestBody @Valid ProductDTO productDTO){
-        Optional<Product> optionalId = this.productService.findById(id);
+        var optionalId = this.productService.findById(id);
 
         if(optionalId.isEmpty()) return ResponseEntity.notFound().build();
 
@@ -72,7 +72,9 @@ public class ProductController {
 
         product.setId(id);
 
-        return ResponseEntity.ok(this.productService.save(product));
+        this.productService.save(product);
+
+        return ResponseEntity.noContent().build();
     }
 
     @ApiOperation(value = "Return a product by id")
@@ -80,9 +82,9 @@ public class ProductController {
             @ApiResponse(code = 200, message = "Product found"),
             @ApiResponse(code = 404, message = "Product not found")
     })
-    @GetMapping("/{id}")
+    @GetMapping("{id}")
     public ResponseEntity<Product> findById(@PathVariable UUID id){
-        Optional<Product> optionalId = this.productService.findById(id);
+        var optionalId = this.productService.findById(id);
 
         if(optionalId.isEmpty()) return ResponseEntity.notFound().build();
 
@@ -92,14 +94,14 @@ public class ProductController {
     @ApiOperation(value = "Return a list of products")
     @ApiResponses({
             @ApiResponse(code = 200, message = "List found"),
-            @ApiResponse(code = 404, message = "No one content found")
+            @ApiResponse(code = 404, message = "List not found")
     })
-    @GetMapping("/")
-    public ResponseEntity<Page<Product>> findAll(@PageableDefault Pageable pageable){
-        var listProduct = this.productService.findAll(pageable);
+    @GetMapping
+    public ResponseEntity<Page<Product>> findAll(@PageableDefault(size = 8) Pageable pageable){
+        var pageProduct = this.productService.findAll(pageable);
 
-        if(listProduct.isEmpty()) return ResponseEntity.noContent().build();
+        if(pageProduct.isEmpty()) return ResponseEntity.notFound().build();
 
-        return ResponseEntity.ok(listProduct);
+        return ResponseEntity.ok(pageProduct);
     }
 }

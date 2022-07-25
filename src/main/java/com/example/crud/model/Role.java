@@ -16,18 +16,18 @@ public class Role implements Serializable, GrantedAuthority {
     @Id
     @GeneratedValue
     @Column(nullable = false, length = 16)
-    private UUID id;
+    private Long id;
     @Column(nullable = false, length = 10)
     private String name;
     @JsonIgnore
     @ManyToMany(mappedBy = "roles")
     private List<User> users;
 
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -47,6 +47,7 @@ public class Role implements Serializable, GrantedAuthority {
         this.users = users;
     }
 
+    @Transient
     @Override
     public String getAuthority() {
         return name;
