@@ -34,6 +34,11 @@ public class SecurityConfig {
                             .antMatchers("/user/**").permitAll()
                             .antMatchers("/state/**").permitAll()
                             .antMatchers("/city/**").permitAll()
+                            .antMatchers(
+                                    "/v2/api-docs",
+                                    "/v3/api-docs",
+                                    "/swagger-resources/**",
+                                    "/swagger-ui/**").permitAll()
                             .anyRequest().authenticated();
                 })
                 .httpBasic().and().logout(logout -> {
