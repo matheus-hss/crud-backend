@@ -7,4 +7,5 @@ You can test it through from the url: https://crud-backend-springboot.herokuapp.
 
 URL: https://crud-backend-springboot.herokuapp.com
 
-![swagger](https://user-images.githubusercontent.com/107885057/180045701-0ed015bd-ed13-4957-8921-ea44edcbcf4d.png)
+
+![swagger](https://user-images.githubusercontent.com/107885057/180709755-da24bf71-4485-4e1c-8532-4cd09a9979b7.png)
